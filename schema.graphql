@@ -1,0 +1,81 @@
+type Token @entity {
+  id: ID!
+
+  "Name"
+  name: String!
+  "Symbol"
+  symbol: String!
+  "Decimals"
+  decimals: BigInt!
+
+  # token specific volume
+  tradeVolume: BigDecimal!
+  tradeVolumeUSD: BigDecimal!
+  # untrackedVolumeUSD: BigDecimal!
+
+  # transactions across all pairs
+  totalTransactions: BigInt!
+
+  # liquidity across all pairs
+  totalLiquidity: BigDecimal!
+  # liquidity across all pairs that is beign tracked in USD
+  trackedTotalLiquidity: BigDecimal!
+  # USD liqudity
+  trackedTotalLiquidityUSD: BigDecimal!
+
+
+  # derived prices
+  derivedETH: BigDecimal!
+  derivedUSD: BigDecimal!
+
+  # derived fields
+  # tokenDayData: [TokenDayData!]! @derivedFrom(field: "token")
+  # pairDayDataBase: [PairDayData!]! @derivedFrom(field: "token0")
+  # pairDayDataQuote: [PairDayData!]! @derivedFrom(field: "token1")
+  # pairBase: [Pair!]! @derivedFrom(field: "token0")
+  # pairQuote: [Pair!]! @derivedFrom(field: "token1")
+}
+
+type Pair @entity {
+  id: ID!
+
+  name: String!
+
+  # mirrored from the smart contract
+  token0: Token!
+  token1: Token!
+  reserve0: BigDecimal!
+  reserve1: BigDecimal!
+
+  reserve0LiquidityUSD: BigDecimal!
+  reserve1LiquidityUSD: BigDecimal!
+
+
+  # totalSupply: BigDecimal!
+
+  # derived liquidity
+  reserveETH: BigDecimal!
+  reserveUSD: BigDecimal!
+  trackedReserveETH: BigDecimal! # used for separating per pair reserves and global
+  trackedReserveUSD: BigDecimal! # used for separating per pair reserves and global
+  # Price in terms of the asset pair
+  token0Price: BigDecimal!
+  token1Price: BigDecimal!
+
+  # lifetime volume stats
+  volumeToken0: BigDecimal!
+  volumeToken1: BigDecimal!
+  volumeUSD: BigDecimal!
+  # untrackedVolumeUSD: BigDecimal!
+  totalTransactions: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+# stores for USD calculations
+type Bundle @entity {
+  id: ID!
+  bzzPrice: BigDecimal! # price of BZZ in USD
+  ethPrice: BigDecimal! # price of ETH usd
+}
